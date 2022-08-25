@@ -1,0 +1,94 @@
+version: '3'
+
+services:
+  master1:
+    image: redis:7.0.4
+    container_name: master1
+    command: "redis-server /etc/redis.conf"
+    volumes:
+      - master1:/data
+      - ./master.conf:/etc/redis.conf
+    ports:
+      - 10001:6379
+  master2:
+    image: redis:7.0.4
+    container_name: master2
+    command: "redis-server /etc/redis.conf"
+    volumes:
+      - master2:/data
+      - ./master.conf:/etc/redis.conf
+    ports:
+      - 10002:6379
+  slave1:
+    image: redis:7.0.4
+    container_name: slave1
+    command: "redis-server --replicaof master1 6379"
+    volumes:
+      - slave1:/data
+    depends_on:
+      - master1
+  slave2:
+    image: redis:7.0.4
+    container_name: slave2
+    command: "redis-server --replicaof master1 6379"
+    volumes:
+      - slave2:/data
+    depends_on:
+      - master1
+  slave3:
+    image: redis:7.0.4
+    container_name: slave3
+    command: "redis-server --replicaof master2 6379"
+    volumes:
+      - slave3:/data
+    depends_on:
+      - master2
+  slave4:
+    image: redis:7.0.4
+    container_name: slave4
+    command: "redis-server --replicaof master2 6379"
+    depends_on:
+      - master2
+    volumes:
+      - slave4:/data
+  sentinel1:
+    image: redis:7.0.4
+    container_name: sentinel1
+    command: "redis-server /etc/redis.conf --sentinel"
+    depends_on:
+      - master1
+      - master2
+    volumes:
+      - sentinel1:/data
+      - ./sentinel.conf:/etc/redis.conf
+  sentinel2:
+    image: redis:7.0.4
+    container_name: sentinel2
+    command: "redis-server /etc/redis.conf --sentinel"
+    depends_on:
+      - master1
+      - master2
+    volumes:
+      - sentinel2:/data
+      - ./sentinel.conf:/etc/redis.conf
+  sentinel3:
+    image: redis:7.0.4
+    container_name: sentinel3
+    command: "redis-server /etc/redis.conf --sentinel"
+    depends_on:
+      - master1
+      - master2
+    volumes:
+      - sentinel3:/data
+      - ./sentinel.conf:/etc/redis.conf
+
+volumes:
+  master1:
+  master2:
+  slave1:
+  slave2:
+  slave3:
+  slave4:
+  sentinel1:
+  sentinel2:
+  sentinel3:
