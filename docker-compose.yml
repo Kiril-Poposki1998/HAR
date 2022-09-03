@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  master1:
+  master:
     image: redis:7.0.4
     container_name: master1
     command: "redis-server /etc/redis.conf"
