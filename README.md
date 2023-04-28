@@ -1,5 +1,6 @@
 # HAR
-High availability redis cluster with sentinel
+High availability redis cluster with sentinel. </br>
+Run cluster with:
 ``` 
-Run cluster with docker-compose up -d --build --force 
+docker-compose up -d --build --force 
 ```
